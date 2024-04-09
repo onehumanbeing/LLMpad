@@ -8,7 +8,7 @@ anthropic_base_url = st.secrets["anthropic_base_url"] if "anthropic_base_url" in
 gpt_base_url = st.secrets["gpt_base_url"] if "gpt_base_url" in st.secrets else 'https://gba-api.thefans.life/gpt/v1'
 st.title("💬 Chatbot with GPT4 & Claude")
 
-uploaded_file = st.file_uploader("Upload an article", type=("txt", "md"))
+uploaded_file = st.file_uploader("Upload an file", type=("txt", "md"))
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = list()
@@ -18,14 +18,14 @@ if uploaded_file and not anthropic_api_key:
 
 if uploaded_file:
     filedata = uploaded_file.read().decode()
-    st.session_state["messages"] = [{"role": "assistant", "content": filedata}]
+    st.session_state["messages"] = [{"role": "user", "content": filedata}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input(key="claude", placeholder="Your message with Claude"):
     if not anthropic_api_key:
-        st.info("Please add your OpenAI API key to continue.")
+        st.info("Please add your Anthropic API key to continue.")
         st.stop()
     # if len(st.session_state["claude_messages"]) == 0:
     #     st.stop()
@@ -40,15 +40,6 @@ if prompt := st.chat_input(key="claude", placeholder="Your message with Claude")
     msg = response.content[0].text
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
-
-# OPENAI
-# st.title("💬 Chatbot with GPT4")
-
-# if "messages" not in st.session_state:
-#     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-
-# for msg in st.session_state.messages:
-#     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input(key="gpt4", placeholder="Your message with GPT4"):
     if not openai_api_key:
