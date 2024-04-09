@@ -20,8 +20,8 @@ if uploaded_file and not anthropic_api_key:
     st.info("Please add your Anthropic API key to continue.")
 
 if uploaded_file:
-    filedata = uploaded_file.read().decode()
-    st.session_state["messages"].append({"role": "user", "content": filedata})
+    prompt = uploaded_file.read().decode()
+    st.session_state["messages"].append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     client = anthropic.Anthropic(api_key=anthropic_api_key, base_url=anthropic_base_url)
     response = client.messages.create(
