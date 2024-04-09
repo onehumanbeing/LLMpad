@@ -29,7 +29,8 @@ if uploaded_file and question and anthropic_api_key:
         prompt=prompt,
         stop_sequences=[anthropic.HUMAN_PROMPT],
         model="claude-3-opus-20240229",
-        max_tokens=1024,
+        max_tokens=4096,
+        max_tokens_to_sample=4096
     )
     st.write("### Answer")
     st.write(response.completion)
