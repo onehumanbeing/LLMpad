@@ -13,15 +13,25 @@ uploaded_file = st.file_uploader("Upload an file", type=("txt", "md"))
 if "messages" not in st.session_state:
     st.session_state["messages"] = list()
 
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
 if uploaded_file and not anthropic_api_key:
     st.info("Please add your Anthropic API key to continue.")
 
 if uploaded_file:
     filedata = uploaded_file.read().decode()
-    st.session_state["messages"] = [{"role": "user", "content": filedata}]
-
-for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+    st.session_state["messages"].append({"role": "user", "content": filedata})
+    st.chat_message("user").write(prompt)
+    client = anthropic.Anthropic(api_key=anthropic_api_key, base_url=anthropic_base_url)
+    response = client.messages.create(
+        model="claude-3-opus-20240229",
+        max_tokens=1024,
+        messages=st.session_state.messages
+    )
+    msg = response.content[0].text
+    st.session_state.messages.append({"role": "assistant", "content": msg})
+    st.chat_message("assistant").write(msg)
 
 if prompt := st.chat_input(key="claude", placeholder="Your message with Claude"):
     if not anthropic_api_key:
