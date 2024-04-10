@@ -4,8 +4,8 @@ import streamlit as st
 
 anthropic_api_key = st.secrets["anthropic_api_key"]
 openai_api_key = st.secrets["openai_api_key"]
-anthropic_base_url = st.secrets["anthropic_base_url"] if "anthropic_base_url" in st.secrets else 'https://gba-api.thefans.life/claude'
-gpt_base_url = st.secrets["gpt_base_url"] if "gpt_base_url" in st.secrets else 'https://gba-api.thefans.life/gpt/v1'
+anthropic_base_url = st.secrets["anthropic_base_url"] if "anthropic_base_url" in st.secrets else 'https://api.anthropic.com'
+gpt_base_url = st.secrets["gpt_base_url"] if "gpt_base_url" in st.secrets else 'https://api.openai.com/v1'
 st.title("💬 Chatbot with GPT4 & Claude")
 
 uploaded_file = st.file_uploader("Upload an file", type=("txt", "md"))
